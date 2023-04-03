@@ -45,16 +45,17 @@ public class Game extends GameApplication {
         private void jumpUp() {
             double startY = entity.getY();
 
-            FXGL.animationBuilder()
+            Animation<?> jumpAnimation = FXGL.animationBuilder()
                     .duration(Duration.seconds(0.4))
                     .onFinished(() -> isJumping = false)
                     .translate(entity)
                     .from(new Point2D(entity.getX(), startY))
                     .to(new Point2D(entity.getX(), startY - jumpHeight))
-                    .buildAndPlay();
+                    .build();
+
+            jumpAnimation.start();
         }
     }
-
 
     @Override
     protected void initGame() {
@@ -92,7 +93,7 @@ public class Game extends GameApplication {
         input.addAction(new UserAction("Player 1 Jump") {
             @Override
             protected void onActionBegin() {
-                player1.getComponent(JumpControl.class).startJump();
+                jump(player1);
             }
         }, KeyCode.W);
 
@@ -122,11 +123,10 @@ public class Game extends GameApplication {
             }
         }, KeyCode.RIGHT);
 
-
         input.addAction(new UserAction("Player 2 Jump") {
             @Override
             protected void onActionBegin() {
-                player2.getComponent(JumpControl.class).startJump();
+                jump(player2);
             }
         }, KeyCode.UP);
 
@@ -180,9 +180,9 @@ public class Game extends GameApplication {
         jumpAnimation.start();
     }
 
-
     public static void main(String[] args) {
         launch(args);
     }
 }
+
 
